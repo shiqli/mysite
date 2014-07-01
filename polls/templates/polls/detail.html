@@ -1,0 +1,22 @@
+<h1>{{ poll.question }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:vote' poll.id %}" method="post">
+{% csrf_token %}
+{% for choice in poll.choice_set.all %}
+	<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+	<label for"choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br/>
+{% endfor %}
+<p>Name:</p>
+{% if voters %}
+	{% for voter in voters %}
+		<input type="radio" name="voter" id="voter{{ forloop.counter }}" value="{{ voter.voter_name }}" />
+		<label for"voter{{ forloop.counter }}">{{ voter.voter_name }}</label><br/>
+	{% endfor %}
+{% else %}
+	<p> No voter exists in file.</p>
+{% endif %}
+
+<input type="submit" value="Vote" />
+</form>
